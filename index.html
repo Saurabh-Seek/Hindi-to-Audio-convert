@@ -1,21 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindi To Audio Converter</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech Synthesis</title>
+  </head>
+  <body>
+    <H1 style="text-align: center;">   Test your system Voice</H1>
+   <div style="align-items: center; justify-content: center; display: flex; flex-direction: column;">
     <div>
-        <input type="text"  id="input">
-        <button onclick="speak()">Speak</button>
-    </div>
+        <input type="text" id="inputDavid" placeholder="Enter text to speak" />
+        <button onclick="speak('David')">David</button>
+      </div>
+      <br>
+      <div>
+        <input type="text" id="inputMark" placeholder="Enter text to speak" />
+        <button onclick="speak('Mark')">Mark</button>
+      </div>
+      <br>
+      <div>
+        <input type="text" id="inputZira" placeholder="Enter text to speak" />
+        <button onclick="speak('Zira')">Zira</button>
+      </div>
+   </div>
+
     <script>
-        function speak(){
-            var text = document.getElementById("input").value;
-            var ans = new SpeechSynthesisUtterance(text);
-            speechSynthesis.speak(ans)
+      function speak(name) {
+        var text = "";
+        if (name === 'David') {
+          text = document.getElementById("inputDavid").value;
+        } else if (name === 'Mark') {
+          text = document.getElementById("inputMark").value;
+        } else if (name === 'Zira') {
+          text = document.getElementById("inputZira").value;
         }
+
+        var ans = new SpeechSynthesisUtterance(text);
+
+        // Get the list of voices
+        var voices = speechSynthesis.getVoices();
+        console.log("voices ==> ", voices);
+
+        var selectedVoice = null;
+        if (name === 'David') {
+          selectedVoice = voices.find(
+            (voice) => voice.name === "Microsoft David - English (United States)"
+          );
+        } else if (name === 'Mark') {
+          selectedVoice = voices.find(
+            (voice) => voice.name === "Microsoft Mark - English (United States)"
+          );
+        } else if (name === 'Zira') {
+          selectedVoice = voices.find(
+            (voice) => voice.name === "Microsoft Zira - English (United States)"
+          );
+        }
+
+        // Select the desired voice
+        if (selectedVoice) {
+          ans.voice = selectedVoice;
+        }
+
+        speechSynthesis.speak(ans);
+      }
+
+      // Ensure voices are loaded before attempting to use them
+      window.speechSynthesis.onvoiceschanged = function () {
+        speechSynthesis.getVoices();
+      };
     </script>
-</body>
+  </body>
 </html>
